@@ -1,0 +1,19 @@
+50% Projet
+Approfondissement de deux sujets de TP
+Choisir deux pistes à creuser
+Par groupes de deux, un.e leader et un.e follower
+Chaque étudiant.e est leader pour un sujet et follower pour l’autre
+note = 0.7 × Leader + 0.3 × Follower
+Rapport dont la structure est imposée
+Commencer le plus tôt possible
+50% Examen
+
+
+
+
+Création d’embedding statiques
+
+Modèle de langage fondé sur des transformers
+
+Modèle de langage fondé sur un perceptron multi-couche
+Modèle de langage fondé sur un réseau récurrent

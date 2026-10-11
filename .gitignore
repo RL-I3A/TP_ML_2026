@@ -1,0 +1,7 @@
+Donnees/
+*.tok
+*.bpe
+*.emb
+*.vec
+__pycache__/
+.DS_Store
