@@ -10,3 +10,4 @@ Avant de lancer les scripts :
 - - - talia_donnees/
 - - Rendu/
 - - - w2v/
+- - ...
