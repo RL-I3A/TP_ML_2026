@@ -5,3 +5,6 @@ Donnees/
 *.vec
 __pycache__/
 .DS_Store
+kd.py 
+43/
+
