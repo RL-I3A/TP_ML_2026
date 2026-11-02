@@ -17,6 +17,8 @@ def calculer(texte, emb):
         if i % 2 == 0:                      # position d'un mot
             if m in ("+", "-"):
                 raise ValueError(f"'{m}' est à une place où un mot est attendu")
+            if m not in emb and m.lower() in emb:
+                m = m.lower()
             if m not in emb:
                 raise ValueError(f"le mot '{m}' n'existe pas dans les embeddings")
             utilises.append(m)
@@ -35,7 +37,7 @@ def calculer(texte, emb):
 
 
 if __name__ == "__main__":
-    emb = load_embeddings(sys.argv[1], 500000)
+    emb = load_embeddings(sys.argv[1], 200000)
     mots = list(emb.keys())
     matrice = np.array([emb[m] for m in mots])
     index = construire(mots, matrice)
@@ -54,4 +56,4 @@ if __name__ == "__main__":
         for mot, d in chercher(index, x, utilises):
             print(f"  {mot}  (distance {d:.3f})")
 
-# python3 analogie_console.py 43/model.txt
+# python3 analogie_console.py ../../../../Donnees/43/model.txt

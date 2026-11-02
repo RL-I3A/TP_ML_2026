@@ -19,6 +19,7 @@ def load_triplets(path):
     triplets = []
     with open(path, encoding="utf-8") as f:
         for line in f:
+            line = line.replace("œ", "oe") 
             words = line.split()
             if len(words) == 3:
                 triplets.append(tuple(words))
@@ -51,4 +52,4 @@ if __name__ == "__main__":
     print(f"taux de reussite : {ok/total:.4f}")
 
 
-# python3 eval_w2v.py embeddings.txt Le_comte_de_Monte_Cristo.100.sim
+# python3 eval_w2v.py res/embeddings.txt data/Le_comte_de_Monte_Cristo.100.sim

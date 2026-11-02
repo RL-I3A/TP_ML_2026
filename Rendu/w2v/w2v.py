@@ -60,6 +60,7 @@ def sigmoid(x):
 
 
 def train(pairs, vocab_size, n, k, eta, epochs, seed=0):
+    random.seed(seed)    
     rng = np.random.default_rng(seed)
     M = (rng.random((vocab_size, n)) - 0.5) / n
     C = (rng.random((vocab_size, n)) - 0.5) / n
@@ -78,6 +79,7 @@ def train(pairs, vocab_size, n, k, eta, epochs, seed=0):
             sig_negs = []
             for c_neg in v_negs:
                 sig_negs.append(sigmoid(np.dot(v_m, c_neg)))
+            sig_negs = np.array(sig_negs)
 
             total_loss += -np.log(sig_pos + 1e-10) - np.sum(np.log(1 - sig_negs + 1e-10))
 
@@ -111,6 +113,7 @@ if __name__ == "__main__":
     parser.add_argument("--eta", type=float, default=0.1)
     parser.add_argument("--e", type=int, default=5)
     parser.add_argument("--minc", type=int, default=5)
+    parser.add_argument("--seed", type=int, default=0) 
     args = parser.parse_args()
 
     sentences = read_corpus(args.corpus)
@@ -121,13 +124,19 @@ if __name__ == "__main__":
     pairs = make_pairs(sentences_id, args.L)
     print(f"{len(pairs)} training pairs")
 
-    M = train(pairs, len(vocab), args.n, args.k, args.eta, args.e)
+    M = train(pairs, len(vocab), args.n, args.k, args.eta, args.e, args.seed)
 
     save_embeddings(args.output, vocab, M)
     print(f"embeddings written to {args.output}")
 
 
-# python3 w2v.py corpus_bpe_gru.tok embeddings.txt --n 100 --L 2 --k 10 --eta 0.1 --e 5 --minc 5
+# python3 w2v.py data/train_500k_propre.tok res/embeddings.txt --n 100 --L 2 --k 10 --eta 0.1 --e 5 --minc 5
 # Tests
-# sentences = read_corpus("corpus_bpe_gru.tok")
+# sentences = read_corpus("data/train_500k_propre.tok")
 # print(sentences)
+
+# Baseline : 
+# for s in 0 1 2 3 4 5 6 7 8 9; do
+#  python3 w2v.py data/train_500k_propre.tok res/emb_base_$s.txt --seed $s > /dev/null && \
+#  python3 eval_w2v.py res/emb_base_$s.txt data/Le_comte_de_Monte_Cristo.100.sim | tail -1
+# done

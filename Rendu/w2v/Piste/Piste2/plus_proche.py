@@ -2,7 +2,7 @@ import numpy as np
 
 
 def construire(mots, matrice):
-    return (mots, matrice) # utile seulement pour l'uatre méthode
+    return (mots, matrice) # utile seulement pour l'autre méthode
 
 
 def chercher(index, x, exclus, topn=5):

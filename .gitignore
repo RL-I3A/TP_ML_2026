@@ -5,6 +5,6 @@ Donnees/
 *.vec
 __pycache__/
 .DS_Store
-kd.py 
 43/
+Rendu/w2v/res/*.txt
 
