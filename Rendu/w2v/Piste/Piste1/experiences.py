@@ -16,7 +16,7 @@ import numpy as np
 CORPUS = "../../data/train_500k_propre.tok"
 EVAL = "../../data/Le_comte_de_Monte_Cristo.100.sim"
 EVAL_SCRIPT = "../../eval_w2v.py"
-SORTIE = "res/emb_tmp.emb"            # écrasé à chaque lancement (.emb est dans le .gitignore)
+SORTIE = "res/emb_tmp.emb"            # écrasé à chaque lancement 
 RESULTATS = "res/resultats.csv"
 
 # une seule amélioration à la fois, puis tout ensemble
@@ -29,7 +29,6 @@ CONFIGS = {
     "decroissance": ["--decroissance"],
     "fenetre_alea": ["--fenetre_aleatoire"],
     "c_zero": ["--c_zero"],
-    # à adapter : garder la meilleure valeur de t trouvée au-dessus
     "neg_decr": ["--neg", "unigram", "--decroissance"],
     "neg_decr_czero": ["--neg", "unigram", "--decroissance", "--c_zero"],
 }
