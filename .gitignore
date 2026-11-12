@@ -1,4 +1,6 @@
 Donnees/
+/Rendu/mlp/data/
+/Rendu/mlp/saved models/
 *.tok
 *.bpe
 *.emb
