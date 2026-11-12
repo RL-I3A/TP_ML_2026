@@ -6,7 +6,8 @@ from load_embeddings import load_embeddings
 
 
 def trouver(mot, emb):
-    # essaie le mot tel quel, puis en minuscules (France -> france)
+
+    # essaie le mot en Majuscule et miniscule 
     if mot in emb:
         return mot
     if mot.lower() in emb:
@@ -62,6 +63,7 @@ if __name__ == "__main__":
             b = trouver(q[1], emb)
             c = trouver(q[2], emb)
             d = trouver(q[3], emb)
+            
             if a is None or b is None or c is None or d is None:
                 ignores += 1
                 print(f"{num:3d} IGNOREE  {ligne.strip()}")
@@ -83,6 +85,7 @@ if __name__ == "__main__":
     duree = time.time() - debut
     print()
     print(f"{total} évaluées, {ignores} ignorées (mot absent)")
+
     if total > 0:
         print(f"top-1 : {ok1}/{total} = {ok1/total:.4f}")
         print(f"top-5 : {ok5}/{total} = {ok5/total:.4f}")

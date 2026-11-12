@@ -1,13 +1,13 @@
-# Piste 8.1 : amélioration des performances de w2v.py
-#
 # Améliorations reprises de Mikolov et al. (2013), "Distributed Representations of
 # Words and Phrases and their Compositionality" (article) et du code officiel word2vec :
+
 #   --neg unigram        négatifs tirés selon fréquence^0.75 (article, section 2.2)
 #   --t 1e-4             sous-échantillonnage des mots fréquents (article, section 2.3)
 #   --decroissance       taux d'apprentissage qui diminue linéairement (code officiel)
 #   --fenetre_aleatoire  taille de fenêtre tirée entre 1 et L pour chaque mot (code officiel)
 #   --c_zero             matrice C initialisée à 0 (code officiel)
-# Sans aucune option, c'est exactement le modèle de base de w2v.py.
+
+
 
 import argparse
 import random
@@ -44,11 +44,15 @@ def build_vocab(sentences, minc):
         word2id[w] = i
         i += 1
 
+
+
     # nombre d'occurrences de chaque mot du vocabulaire (même ordre que vocab)
     comptes = []
     for w in vocab:
         comptes.append(counts[w])
     comptes = np.array(comptes, dtype=float)
+
+
 
     vocab_set = set(vocab)
     filtered = []
@@ -61,7 +65,8 @@ def build_vocab(sentences, minc):
 
 
 def sous_echantillonner(sentences_id, freq, t, rng):
-    # Article, équation (5) : chaque occurrence d'un mot w est supprimée
+
+    # chaque occurrence d'un mot w est supprimée (Article, équation (5))
     # avec la probabilité 1 - sqrt(t / f(w)), f(w) = fréquence relative de w
     p_garder = np.minimum(1.0, np.sqrt(t / freq))
     nouvelles = []
@@ -82,7 +87,7 @@ def make_pairs(sentences_id, L, fenetre_aleatoire=False, rng=None):
         n = len(s)
         for i in range(n):
             if fenetre_aleatoire:
-                l = rng.integers(1, L + 1)   # code officiel : fenêtre entre 1 et L
+                l = rng.integers(1, L + 1)   # fenêtre entre 1 et L (code officiel)
             else:
                 l = L
             for j in range(max(0, i - l), min(n, i + l + 1)):
@@ -92,9 +97,11 @@ def make_pairs(sentences_id, L, fenetre_aleatoire=False, rng=None):
 
 
 def table_negatifs(comptes, puissance, taille=10_000_000):
-    # Article : les négatifs sont tirés selon P(w) = U(w)^(3/4) / Z
+
+    # les négatifs sont tirés selon P(w) = U(w)^(3/4) / Z (Article)
     # On remplit une grande table où chaque mot apparaît proportionnellement à P(w),
     # puis on tire une case au hasard (même idée que le code officiel)
+
     p = comptes ** puissance
     p = p / p.sum()
     nb_cases = np.maximum(1, np.round(p * taille)).astype(int)
@@ -106,6 +113,7 @@ def sigmoid(x):
 
 
 def train(sentences_id, comptes, args):
+
     random.seed(args.seed)
     rng = np.random.default_rng(args.seed)
     V = len(comptes)
@@ -195,6 +203,7 @@ if __name__ == "__main__":
     parser.add_argument("--e", type=int, default=5)
     parser.add_argument("--minc", type=int, default=5)
     parser.add_argument("--seed", type=int, default=0)
+    
     # améliorations (désactivées par défaut)
     parser.add_argument("--neg", default="uniforme")              # uniforme ou unigram
     parser.add_argument("--puissance", type=float, default=0.75)  # exposant pour --neg unigram

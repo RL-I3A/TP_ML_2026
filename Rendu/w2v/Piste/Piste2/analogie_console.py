@@ -13,31 +13,44 @@ def calculer(texte, emb):
 
     x = None
     utilises = []
+
     for i, m in enumerate(morceaux):
+
         if i % 2 == 0:                      # position d'un mot
+
             if m in ("+", "-"):
                 raise ValueError(f"'{m}' est à une place où un mot est attendu")
+            
             if m not in emb and m.lower() in emb:
                 m = m.lower()
+
             if m not in emb:
                 raise ValueError(f"le mot '{m}' n'existe pas dans les embeddings")
+            
             utilises.append(m)
+
             if x is None:
                 x = emb[m].copy()
+
             elif operateur == "+":
                 x = x + emb[m]
+
             else:
+            
                 x = x - emb[m]
+
         else:                               # position d'un opérateur
+           
             if m not in ("+", "-"):
                 raise ValueError(f"'{m}' n'est pas un opérateur (+ ou -)")
+            
             operateur = m
 
     return x, utilises
 
 
 if __name__ == "__main__":
-    
+
     emb = load_embeddings(sys.argv[1], 200000)
     mots = list(emb.keys())
     matrice = np.array([emb[m] for m in mots])
@@ -48,8 +61,10 @@ if __name__ == "__main__":
         texte = input("> ").strip()
         if texte == "":
             break
+        
         try:
             x, utilises = calculer(texte, emb)
+
         except ValueError as e:
             print("erreur :", e)
             continue

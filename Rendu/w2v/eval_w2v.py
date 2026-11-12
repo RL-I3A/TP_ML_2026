@@ -2,27 +2,42 @@ import argparse
 import numpy as np
 
 
+# emb = {"vélo": array([..., ...]), " " : ..., ... }
+
 def load_embeddings(path):
+
     emb = {}
+
     with open(path, encoding="utf-8") as f:
+
         premiere_ligne = f.readline().split()
         dim = int(premiere_ligne[1])
+
         for line in f:
+
             parts = line.rstrip("\n").split(" ")
             word = parts[0]
             vec = np.array(parts[1:1 + dim], dtype=float)
             emb[word] = vec
+
     return emb
 
+# triplets = [("vélo", "bicyclette", "chat"), ..., ...]
 
 def load_triplets(path):
+
     triplets = []
+
     with open(path, encoding="utf-8") as f:
+
         for line in f:
+
             line = line.replace("œ", "oe") 
             words = line.split()
+
             if len(words) == 3:
                 triplets.append(tuple(words))
+
     return triplets
 
 

@@ -13,6 +13,8 @@ def read_corpus(path):
 
 
 def build_vocab(sentences, minc):
+
+    # Occurences
     counts = {}
     for s in sentences:
         for w in s:
@@ -21,24 +23,27 @@ def build_vocab(sentences, minc):
             else:
                 counts[w] = 1
 
-    vocab = [] # Liste des mots (avec un certains taux d'apparition)
+    # Liste des mots qui ont un certains taux d'apparition
+    vocab = [] 
     for w in counts:
         if counts[w] >= minc:
             vocab.append(w)
-    
-    vocab.sort(key=lambda w: counts[w], reverse=True) # Trié par ordre de fréquence
 
-    word2id = {} # Classement dans la liste : mot
+    # Trié par ordre de fréquence
+    vocab.sort(key=lambda w: counts[w], reverse=True) 
+
+    # {Classement dans la liste : mot}
+    word2id = {} 
     i = 0
     for w in vocab:
         word2id[w] = i
         i += 1
 
-    vocab_set = set(vocab)
+    vocab_set = set(vocab) # Recherche plus rapide 
     filtered = []
-    for s in sentences: # Pour chaque phrases
+    for s in sentences: 
         s2 = [w for w in s if w in vocab_set]
-        if len(s2) >= 2: # Si la phrase est trop petit on prend pas 
+        if len(s2) >= 2: 
             filtered.append(s2)
 
     return word2id, vocab, filtered
@@ -46,10 +51,13 @@ def build_vocab(sentences, minc):
 
 def make_pairs(sentences_id, L):
     pairs = []
-    for s in sentences_id: # Sentences_id = liste des phrases, où chaque mot est remplacé par son numéro
+
+    # Sentences_id = liste des phrases, où chaque mot est remplacé par son numéro
+    for s in sentences_id: 
         n = len(s)
         for i in range(n):
-            for j in range(max(0, i - L), min(n, i + L + 1)): # L = taille de demie fenêtre
+            # L = taille de demie fenêtre
+            for j in range(max(0, i - L), min(n, i + L + 1)): 
                 if i != j:
                     pairs.append((s[i], s[j]))
     return pairs
@@ -60,23 +68,28 @@ def sigmoid(x):
 
 
 def train(pairs, vocab_size, n, k, eta, epochs, seed=0):
+
     random.seed(seed)    
     rng = np.random.default_rng(seed)
     M = (rng.random((vocab_size, n)) - 0.5) / n
     C = (rng.random((vocab_size, n)) - 0.5) / n
 
     for ep in range(epochs):
+
         random.shuffle(pairs)
         total_loss = 0
+
         for m, cpos in pairs:
+
             negs = rng.integers(0, vocab_size, size=k)
 
             v_m = M[m] # vecteur du mot cible
-            v_cpos = C[cpos]
-            v_negs = C[negs]
+            v_cpos = C[cpos] # vecteur du contexte positif
+            v_negs = C[negs] # vecteur du mot cible
 
             sig_pos = sigmoid(np.dot(v_m, v_cpos))
             sig_negs = []
+            
             for c_neg in v_negs:
                 sig_negs.append(sigmoid(np.dot(v_m, c_neg)))
             sig_negs = np.array(sig_negs)
