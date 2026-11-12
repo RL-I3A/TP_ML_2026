@@ -1,10 +1,10 @@
 import numpy as np
 
-stats = {"examines": 0}      # compteur : nombre de mots dont on a calculé la distance
+stats = {"examines": 0}      # nb de mots dont on a calculé la distance
 
 
 def construire_noeud(matrice, idx, taille_feuille):
-    # peu de mots restants : une feuille
+
     if len(idx) <= taille_feuille:
         return ("feuille", idx)
 
@@ -13,7 +13,7 @@ def construire_noeud(matrice, idx, taille_feuille):
     ordre = np.argsort(points[:, dim])
     idx = idx[ordre]                             # mots triés selon cette dimension
 
-    m = len(idx) // 2                            # position du médian
+    m = len(idx) // 2                            # médian
     valeur = matrice[idx[m], dim]                # valeur de coupe
 
     gauche = construire_noeud(matrice, idx[:m], taille_feuille)
@@ -29,7 +29,7 @@ def construire(mots, matrice, taille_feuille=20):
 def chercher(index, x, exclus, topn=5):
     mots, matrice, racine = index
 
-    # on cherche topn + len(exclus) voisins, car on va retirer les mots exclus ensuite
+    # on cherche topn + len(exclus) voisins : on va retirer les mots exclus ensuite
     k = topn + len(exclus)
     meilleurs = []                              
 

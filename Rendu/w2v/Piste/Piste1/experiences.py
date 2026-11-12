@@ -1,12 +1,6 @@
-# Lance plusieurs entraînements par configuration (une graine différente à chaque fois),
-# évalue chacun avec eval_w2v.py, enregistre tout dans res/resultats.csv
-# et affiche la moyenne et l'écart-type de chaque configuration.
-#
-# Utilisation (depuis le dossier Piste1) :
 #   python3 experiences.py 10 base neg075
 #   -> 10 graines pour la config "base" puis 10 pour "neg075"
 #   python3 experiences.py resume
-#   -> affiche le résumé de tout ce qui est dans res/resultats.csv
 
 import sys
 import subprocess
@@ -40,7 +34,6 @@ def lancer(config, graine):
 
     sortie = subprocess.run([sys.executable, EVAL_SCRIPT, SORTIE, EVAL],
                             check=True, capture_output=True, text=True).stdout
-    # dernière ligne : "taux de reussite : 0.7442"
     taux = float(sortie.strip().split("\n")[-1].split(":")[1])
     evaluables = sortie.split("(")[1].split(" ")[0]
     return taux, evaluables

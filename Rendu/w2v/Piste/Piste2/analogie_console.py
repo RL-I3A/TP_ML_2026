@@ -1,11 +1,11 @@
 import sys
 import numpy as np
 from load_embeddings import load_embeddings
-from plus_proche import construire, chercher   # <- à changer en fonction de la méthode
+from plus_proche import construire, chercher   # (à changer en fonction de la méthode)
 
 
 def calculer(texte, emb):
-    # "roi - homme + femme" -> ["roi", "-", "homme", "+", "femme"]
+
     morceaux = texte.split()
 
     if len(morceaux) % 2 == 0:
@@ -37,6 +37,7 @@ def calculer(texte, emb):
 
 
 if __name__ == "__main__":
+    
     emb = load_embeddings(sys.argv[1], 200000)
     mots = list(emb.keys())
     matrice = np.array([emb[m] for m in mots])

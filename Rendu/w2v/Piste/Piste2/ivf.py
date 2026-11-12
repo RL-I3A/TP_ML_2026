@@ -2,21 +2,22 @@ import numpy as np
 
 
 def plus_proche_centre(matrice, centres):
-    # pour chaque mot, numéro du centre le plus proche
+
+    # numéro du centre le plus proche pour chaque mot 
     etiquettes = np.zeros(len(matrice), dtype=int)
     norme_c = np.sum(centres ** 2, axis=1)            # ||c||² pour chaque centre
 
-    # par blocs pour éviter une matrice qui serait trop grosse
     for debut in range(0, len(matrice), 10000):
         bloc = matrice[debut:debut + 10000]
         # ||x - c||² = ||x||² - 2 x·c + ||c||²
-        # ||x||² est le même pour tous les centres, on l'ignore pour comparer
+        # ||x||² est le même pour tous les centres, on l'ignore donc
         scores = norme_c[None, :] - 2 * (bloc @ centres.T)
         etiquettes[debut:debut + 10000] = np.argmin(scores, axis=1)
     return etiquettes
 
 
 def kmeans(donnees, k, nb_iter, rng):
+    
     # on part de k mots tirés au hasard comme centres
     centres = donnees[rng.choice(len(donnees), k, replace=False)].copy()
 
