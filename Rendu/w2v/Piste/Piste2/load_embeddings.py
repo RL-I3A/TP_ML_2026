@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def load_embeddings(path, max_mots=None):
     emb = {}
     with open(path, encoding="utf-8", errors="replace") as f:
