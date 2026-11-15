@@ -76,7 +76,7 @@ Un plongement associe à chaque mot un vecteur qui représente les contextes dan
 
 La première (8.1) cherche à améliorer la qualité des plongements en reprenant des techniques d’un article scientifique et du code officiel word2vec.
 
-Cette piste interroge la différence entre un modèle tel qu’il est décrit dans un article et le modèle tel qu’il est effectivement implémenté. L’intérêt est de chercher à pousser la précision du modèle et de comprendre l’impact de ces améliorations.
+Cette piste questionne la différence entre un modèle comme qu’il est décrit dans un article et tel qu’il est implémenté dans le code. L’intérêt est de chercher à pousser la précision du modèle et de comprendre l’impact de ces améliorations.
 
 La deuxième (8.2) teste si l’arithmétique des vecteurs encode du sens. C’est-à-dire, est-ce que des opérations mathématiques entre vecteurs sont vérifiées~: roi - homme + femme ≈ reine. Elle vérifie cette affirmation célèbre et à quel point elle peut être étendue, sur quels types de relations elle tient, et les différentes manières de chercher efficacement le mot le plus proche d’un vecteur.
 
@@ -171,9 +171,9 @@ Notre valeur est plus élevée, mais les deux chiffres ne sont pas comparables~:
 \subsection*{Limites du modèle initial et pistes envisagées}
 
 
-Les exemples négatifs sont tirés uniformément dans le vocabulaire. Comme les fréquences des mots sont très inégales, la majorité des négatifs sont des mots rares, qu’un classifieur distingue facilement des vrais contextes~: l’information apportée par un tel négatif est-elle suffisante pour bien apprendre ?
+Les exemples négatifs sont tirés uniformément dans le vocabulaire. Comme les fréquences des mots sont très inégales, la majorité des négatifs sont des mots rares, qu’un classifieur distingue facilement des vrais contextes.
 
-Le taux d’apprentissage vaut 0,1 pendant tout l’entraînement, soit plus de 6,6 millions de mises à jour (1~320~894 paires × 5 époques). Un pas aussi grand est utile au début, mais pourrait empêcher une convergence fine à la fin.
+Le taux d’apprentissage vaut 0,1 pendant tout l’entraînement, soit plus de 6,6 millions de mises à jour (1~320~894 paires x 5 époques). Un pas aussi grand est utile au début, mais pourrait empêcher une convergence fine à la fin.
 
 La fenêtre a une taille fixe, alors qu’un mot voisin immédiat semble plus informatif qu’un mot situé deux positions plus loin.
 
@@ -210,7 +210,7 @@ matrice C initialisée à zéro & code officiel \\
 
 \textbf{H2~: le sous-échantillonnage des mots fréquents améliore les performances.} Les mots très fréquents engendrent un grand nombre de paires peu informatives. On s’attend à une meilleure place accordée aux mots porteurs de sens. L’article fixe t autour de 10⁻⁵ pour des corpus de l’ordre du milliard de mots, alors que le nôtre en compte environ 400~000, soit plus de trois ordres de grandeur de moins. Nous testerons donc plusieurs valeurs de t.
 
-\textbf{H3~: un taux d’apprentissage décroissant améliore les performances.} Des pas grands au début permettent d’avancer vite. Des pas de plus en plus petits ensuite permettent de converger sans osciller.
+\textbf{H3~: un taux d’apprentissage décroissant améliore les performances.} Des pas grands au début permettent d’avancer vite puis des pas de plus en plus petits ensuite permettent de converger sans osciller.
 
 \textbf{H4~: une fenêtre de taille aléatoire améliore les performances.} Tirer la demi-fenêtre uniformément entre 1 et L revient à pondérer les contextes selon leur distance. Les contextes proches, supposés plus informatifs, comptent donc davantage.
 
@@ -249,7 +249,7 @@ Avec t = 10⁻⁵, même le mot le plus rare du vocabulaire a une fréquence sup
 
 \textbf{Taux d’apprentissage décroissant.}\nopagebreak
 
-Le taux à l’instant p de l’entraînement vaut η(p) = 0,1 × max(1 - p, 10⁻⁴), où p varie de 0 au premier mini-batch à 1 au dernier.
+Le taux à l’instant p de l’entraînement vaut η(p) = 0,1 x max(1 - p, 10⁻⁴), où p varie de 0 au premier mini-batch à 1 au dernier.
 
 \textbf{Fenêtre aléatoire.}\nopagebreak
 
@@ -297,13 +297,13 @@ idem + C = 0 & 86,2 ± 1,6 & 7,4 & 1,0·10⁻⁷ & 10 / 0 / 0 \\
 \caption{taux de réussite moyen et écart-type pour chaque configuration (10 graines). La ligne horizontale indique la moyenne du modèle initial.}
 \end{figure}
 
-\textbf{Les deux modifications validées~: H1 et H3.} Tirer les négatifs selon fréquence\textasciicircum{}0,75 fait gagner 3,4 points, et le taux décroissant 2,3 points. Chacune est significative au seuil de 5~\% (p ≈ 0,03). Un détail renforce ces résultats~: aucune des deux ne fait jamais moins bien que le modèle initial avec la même graine.
+\textbf{Les deux modifications validées~: H1 et H3.} Tirer les négatifs selon fréquence\textasciicircum{}0,75 fait gagner 3,4 points, et le taux décroissant 2,3 points. Chacune est significative au seuil de 5~\% (p ≈ 0,03). De plus aucune des deux ne fait jamais moins bien que le modèle initial avec la même graine.
 
-\textbf{Leur combinaison.} La configuration qui cumule les deux atteint 86,2~\%, soit +7,4 points, ce qui dépasse la somme des gains obtenus séparément (3,4 + 2,3 = 5,7). Les deux effets se renforcent donc. Nous pouvons proposer une explication, qui reste une hypothèse que nous n’avons pas vérifiée~: avec des négatifs tirés selon la fréquence, les mots fréquents reçoivent beaucoup plus de mises à jour que les autres, et la diminution du taux d’apprentissage stabiliserait ces vecteurs fortement sollicités en fin d’entraînement.
+\textbf{Leur combinaison.} La configuration qui cumule les deux atteint 86,2~\%, soit +7,4 points, ce qui dépasse la somme des gains obtenus séparément (3,4 + 2,3 = 5,7). Les deux effets se renforcent donc. Nous pouvons proposer une explication, (hypothèse non vérifiée) ~: avec des négatifs tirés selon la fréquence, les mots fréquents reçoivent beaucoup plus de mises à jour que les autres, et la diminution du taux d’apprentissage stabiliserait ces vecteurs fortement sollicités en fin d’entraînement.
 
 \textbf{Le sous-échantillonnage (H2)~: hypothèse invalidée sur notre corpus.} Plus le seuil t est petit, plus le score baisse~: +0,1 point pour t = 10⁻³ (aucune différence), -4,4 points pour 10⁻⁴, -18,6 points pour 10⁻⁵. Le corpus, déjà petit, perd l’essentiel de son information. Cela correspond à l’usage prévu par l’article, qui vise l’accélération de l’entraînement sur des corpus de plusieurs milliards de mots, où l’on peut se permettre de jeter beaucoup d’occurrences sans perte de qualité.
 
-\textbf{La fenêtre aléatoire (H4)~: non validée.} La différence (-1,9 point, p = 0,24) n’est pas significative~: nous ne pouvons pas affirmer que la modification dégrade les résultats, seulement qu’elle ne les améliore pas.
+\textbf{La fenêtre aléatoire (H4)~: non validée.} La différence (-1,9 point, p = 0,24) n’est pas significative~: nous pouvons pas affirmer que la modification dégrade les résultats, seulement qu’elle ne les améliore pas.
 
 \textbf{L’initialisation de C à zéro (H5)~: sans effet, comme attendu.} Le gain de 0,8 point n’est pas significatif (p = 0,43), et l’ajouter à la meilleure combinaison ne modifie pas la moyenne (86,2~\% dans les deux cas).
 
@@ -319,7 +319,7 @@ Les mots a, b et c sont exclus de la recherche. L’analogie est considérée co
 
 Cette évaluation pose un problème algorithmique~: le vecteur x ne correspond à aucun mot, donc chaque analogie demande de chercher le plus proche voisin d’un point parmi N vecteurs de dimension n.
 
-La méthode naïve compare x aux N vecteurs, ce qui coûte de l’ordre de N × n opérations par requête.
+La méthode naïve compare x aux N vecteurs, ce qui coûte de l’ordre de N x n opérations par requête.
 
 Le sujet cite les arbres k-d comme méthode plus efficace et demande de choisir un algorithme efficace parmi ceux de la littérature.
 
@@ -426,7 +426,7 @@ La méthode exacte retrouve 67,0~\% des analogies en top-1 et 79,4~\% en top-5~:
 
 Les relations régulières et morphologiques réussissent le mieux (nationalités 9/10, pluriels 9/10, conjugaisons 9/14), les relations sémantiques indirectes beaucoup moins (métier → lieu 3/8, arbre → fruit 1/4).
 
-Mais plusieurs catégories ne contiennent que 3 à 6 analogies, et un écart d’une analogie y change le taux de 20 à 30 points. L’écart entre top-1 et top-5 (12 analogies) montre que l’erreur est souvent un quasi-succès~: le modèle a trouvé la bonne catégorie mais pas le bon élément.
+Mais plusieurs catégories ne contiennent que 3 à 6 analogies, et un écart d’une analogie y change le taux de 20 à 30 points. L’écart entre top-1 et top-5 (12 analogies) montre que l’erreur est souvent presque un succès~: le modèle a trouvé la bonne catégorie mais pas le bon élément.
 
 C’est le cas le plus fréquent. On le retrouve en conjugaison~: pour \emph{sais, savons, peux, ?}, le modèle propose \emph{voulons}, \emph{aimerions}, \emph{devons}, puis seulement \emph{pouvons}~: il a identifié la forme (première personne du pluriel) et le champ (verbes modaux), mais pas le verbe.
 
@@ -434,9 +434,9 @@ Un plongement statique n’a qu’un vecteur par forme, donc tous les sens du mo
 
 Le même phénomène touche \emph{chienne}, employé surtout dans un sens injurieux dans un corpus issu du web.
 
-C’est une limite structurelle des plongements statiques, que les plongements contextuels cherchent à lever.
+C’est une limite structurelle des plongements statiques, que les plongements contextuels essaye de dépasser.
 
-\emph{Orthographe et bruit du modèle.} Le vocabulaire du modèle, issu de textes du web, contient des variantes (\emph{hanoi} et \emph{hanoï}, \emph{soeur} et \emph{sœur}, \emph{patisserie} et \emph{pâtisserie}) et des formes mal segmentées avec leur ponctuation (\emph{jour!}, \emph{jour?}, \emph{,vous}, \emph{...soit}, \emph{printemps!}). Cela montre que la qualité du prétraitement du modèle externe affecte le score indépendamment de la méthode.
+\emph{Orthographe et bruit du modèle.} Le vocabulaire du modèle, issu de textes du web, contient des variantes (\emph{hanoi} et \emph{hanoï}, \emph{soeur} et \emph{sœur}, \emph{patisserie} et \emph{pâtisserie}) et des formes mal segmentées avec leur ponctuation (\emph{jour!}, \emph{jour?}, \emph{,vous}, \emph{...soit}, \emph{printemps!}). 
 
 \textbf{Portée de ces résultats.}\nopagebreak
 
@@ -498,7 +498,7 @@ Le sous-échantillonnage, présenté par l’article comme une amélioration, d�
 
 La structure de données suggérée par le sujet ne convient pas ici, et une méthode approchée est préférable. L’arbre k-d donne les mêmes réponses que la recherche exhaustive, mais il compare 100~\% des mots à chaque requête~: en dimension 100, son élagage n’écarte aucune branche, comme le laisse prévoir la théorie. L’index inversé IVF est, avec nprobe = 10, environ 18 fois plus rapide que la recherche exhaustive pour une seule analogie réussie en moins sur 97, et avec nprobe = 50 il donne exactement les mêmes réponses tout en restant 3 fois plus rapide.
 
-Sur le fond, les analogies fonctionnent dans une bonne partie des cas (67,0~\% en top-1, 79,4~\% en top-5), surtout pour les relations régulières comme les pluriels, les conjugaisons et les nationalités, et beaucoup moins pour les relations sémantiques indirectes. Les erreurs que nous avons relevées s’expliquent en grande partie par une limite connue des plongements statiques~: un seul vecteur par mot, donc tous les sens d’un mot polysémique confondus.
+Sur le fond, les analogies fonctionnent dans une bonne partie des cas (67,0~\% en top-1, 79,4~\% en top-5), surtout pour les relations régulières comme les pluriels, les conjugaisons et les nationalités, et beaucoup moins pour les relations sémantiques indirectes.
 
 \subsection{Limites}
 
