@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+import csv
 import torch
 from torch.utils.data import TensorDataset, DataLoader
 
@@ -72,6 +73,11 @@ def validate(model, val_loader, loss_function, device="cpu"):
 
 
 def train(model, train_loader, val_loader, epochs, learning_rate, patience, device, saved_model_path, vocab):
+    # Save one row per completed epoch beside the model file.
+    csv_path = Path(saved_model_path).with_suffix(".csv")
+    with csv_path.open("w", newline="", encoding="utf-8") as file:
+        csv.writer(file).writerow(["epoch", "train_loss", "val_loss"])
+
     model.to(device)
 
     loss_function = torch.nn.CrossEntropyLoss()
@@ -105,7 +111,10 @@ def train(model, train_loader, val_loader, epochs, learning_rate, patience, devi
         val_loss = validate(model, val_loader, loss_function, device)
         print(f"Epoch {epoch + 1}: train={train_loss}, val={val_loss}")
 
-        #Early stop 
+        with csv_path.open("a", newline="", encoding="utf-8") as file:
+            csv.writer(file).writerow([epoch + 1, train_loss, val_loss])
+
+        #Early stop
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             epochs_without_improvement = 0
